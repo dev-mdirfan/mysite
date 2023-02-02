@@ -26,6 +26,11 @@
     - [Introducing the Django Admin](#introducing-the-django-admin)
       - [Creating an admin user](#creating-an-admin-user)
       - [Start the development server](#start-the-development-server)
+      - [Enter the admin site](#enter-the-admin-site)
+      - [Make the poll app modifiable in the admin](#make-the-poll-app-modifiable-in-the-admin)
+      - [Explore the free admin functionality](#explore-the-free-admin-functionality)
+  - [3. How to add more views to our polls app](#3-how-to-add-more-views-to-our-polls-app)
+    - [Overview](#overview)
 
 ## 0. Quick Install
 
@@ -670,6 +675,10 @@ True
 >>> c.delete()
 ```
 
+- For more information on model relations, see __Accessing related objects__.
+- For more on how to use double underscores to perform field lookups via the API, see __Field lookups__.
+- For full details on the database API, see our __Database API reference__.
+
 ### Introducing the Django Admin
 
 __Philosophy:__
@@ -719,6 +728,87 @@ python manage.py runserver
 ```
 
 Now, open a web browser and go to “/admin/” on your local domain – e.g., [http://127.0.0.1:8000/admin/](http://127.0.0.1:8000/admin/). You should see the admin’s login screen:
+
+![admin1](images/admin01.png)
+
+Since __translation__ is turned on by default, if you set __LANGUAGE_CODE__, the login screen will be displayed in the given language (if Django has appropriate translations).
+
+#### Enter the admin site
+
+Now, try logging in with the superuser account you created in the previous step. You should see the Django admin index page:
+
+![admin2](images/admin02.png)
+
+You should see a few types of editable content: groups and users. They are provided by __django.contrib.auth__, the authentication framework shipped by Django.
+
+#### Make the poll app modifiable in the admin
+
+But where’s our poll app? It’s not displayed on the admin index page.
+
+Only one more thing to do: we need to tell the admin that __Question__ objects have an admin interface. To do this, open the __polls/admin.py__ file, and edit it to look like this:
+
+```py
+from django.contrib import admin
+
+from .models import Question
+
+admin.site.register(Question)
+```
+
+#### Explore the free admin functionality
+
+Now that we’ve registered __Question__, Django knows that it should be displayed on the admin index page:
+
+![admin3](images/admin03t.png)
+
+Click “Questions”. Now you’re at the “change list” page for questions. This page displays all the questions in the database and lets you choose one to change it. There’s the “What’s up?” question we created earlier:
+
+![admin4](images/admin04t.png)
+
+Click the “What’s up?” question to edit it:
+
+![admin5](images/admin05t.png)
+
+Things to note here:
+
+- The form is automatically generated from the __Question__ model.
+- The different model field types (__DateTimeField__, __CharField__) correspond to the appropriate HTML input widget. Each type of field knows how to display itself in the Django admin.
+- Each __DateTimeField__ gets free JavaScript shortcuts. Dates get a “Today” shortcut and calendar popup, and times get a “Now” shortcut and a convenient popup that lists commonly entered times.
+
+The bottom part of the page gives you a couple of options:
+
+- __Save__ – Saves changes and returns to the change-list page for this type of object.
+- __Save and continue editing__ – Saves changes and reloads the admin page for this object.
+- __Save and add another__ – Saves changes and loads a new, blank form for this type of object.
+- __Delete__ – Displays a delete confirmation page.
+
+If the value of “Date published” doesn’t match the time when you created the question in Tutorial 1, it probably means you forgot to set the correct value for the __TIME_ZONE__ setting. Change it, reload the page and check that the correct value appears.
+
+Change the “Date published” by clicking the “Today” and “Now” shortcuts. Then click “Save and continue editing.” Then click “History” in the upper right. You’ll see a page listing all changes made to this object via the Django admin, with the timestamp and username of the person who made the change:
+
+![admin6](images/admin06t.png)
+
+## 3. How to add more views to our polls app
+
+### Overview
+
+A view is a “type” of web page in your Django application that generally serves a specific function and has a specific template. For example, in a blog application, you might have the following views:
+
+- Blog homepage – displays the latest few entries.
+- Entry “detail” page – permalink page for a single entry.
+- Year-based archive page – displays all months with entries in the given year.
+- Month-based archive page – displays all days with entries in the given month.
+- Day-based archive page – displays all entries in the given day.
+- Comment action – handles posting comments to a given entry.
+
+In our poll application, we’ll have the following four views:
+
+- Question “index” page – displays the latest few questions.
+- Question “detail” page – displays a question text, with no results but with a form to vote.
+- Question “results” page – displays results for a particular question.
+- Vote action – handles voting for a particular choice in a particular question.
+
+In Django, web pages and other content are delivered by views. Each view is represented by a Python function (or method, in the case of class-based views). Django will choose a view by examining the URL that’s requested (to be precise, the part of the URL after the domain name).
 
 
 
