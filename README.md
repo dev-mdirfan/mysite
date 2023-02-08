@@ -36,8 +36,8 @@
       - [A shortcut: render()](#a-shortcut-render)
     - [Raising a 404 error](#raising-a-404-error)
       - [A shortcut: get\_object\_or\_404()](#a-shortcut-get_object_or_404)
-    - [Use the template system¶](#use-the-template-system)
-    - [Removing hardcoded URLs in templates¶](#removing-hardcoded-urls-in-templates)
+    - [Use the template system](#use-the-template-system)
+    - [Removing hardcoded URLs in templates](#removing-hardcoded-urls-in-templates)
     - [Namespacing URL names](#namespacing-url-names)
   - [4. learn the basics about form processing and generic views](#4-learn-the-basics-about-form-processing-and-generic-views)
     - [Write a minimal form](#write-a-minimal-form)
@@ -341,6 +341,7 @@ Now, open up __`mysite/settings.py`__. It’s a normal Python module with module
 - By default, the configuration uses __SQLite__. If you’re new to databases, or you’re just interested in trying Django, this is the easiest choice. SQLite is included in Python, so you won’t need to install anything else to support your database. When starting your first real project, however, you may want to use a more scalable database like PostgreSQL, to avoid database-switching headaches down the road.
 
 - While you’re editing __`mysite/settings.py`__, set __TIME_ZONE__ to your time zone.
+  - For Ex: for India `Asia/Kolkata`
 - Also, note the __INSTALLED_APPS__ setting at the top of the file. That holds the names of all Django applications that are activated in this Django instance. Apps can be used in multiple projects, and you can package and distribute them for use by others in their projects.
 
 By default, __INSTALLED_APPS__ contains the following apps, all of which come with Django:
@@ -1024,7 +1025,7 @@ __Philosophy:__
 
 There’s also a __get_list_or_404()__ function, which works just as __get_object_or_404()__ – except using __filter()__ instead of __get()__. It raises __Http404__ if the list is empty.
 
-### Use the template system¶
+### Use the template system
 
 Back to the __detail()__ view for our poll application. Given the context variable __question__, here’s what the __polls/detail.html__ template might look like:
 
@@ -1042,7 +1043,7 @@ The template system uses dot-lookup syntax to access variable attributes. In the
 Method-calling happens in the __`{% for %}`__ loop: __question.choice_set.all__ is interpreted as the Python code __question.choice_set.all()__, which returns an iterable of Choice objects and is suitable for use in the __`{% for %}`__ tag.
 
 
-### Removing hardcoded URLs in templates¶
+### Removing hardcoded URLs in templates
 
 Remember, when we wrote the link to a question in the __polls/index.html__ template, the link was partially hardcoded like this:
 
